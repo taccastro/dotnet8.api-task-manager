@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GerenciadorTarefas.Testes", "GerenciadorTarefas.Testes\GerenciadorTarefas.Testes.csproj", "{5232A371-1245-432A-A9C0-F7A367348626}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GerenciadorTarefas.Tests", "GerenciadorTarefas.Testes\GerenciadorTarefas.Tests.csproj", "{5232A371-1245-432A-A9C0-F7A367348626}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

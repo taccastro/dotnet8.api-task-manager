@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- xUnit -->
+		<PackageReference Include="xunit" Version="2.5.3" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+
+		<!-- FluentAssertions para asserts mais legíveis -->
+		<PackageReference Include="FluentAssertions" Version="8.6.0" />
+
+		<!-- EF Core InMemory para testes de banco em memória -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.2" />
+
+		<!-- SDK de teste -->
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+
+		<!-- Cobertura de código -->
+		<PackageReference Include="coverlet.collector" Version="6.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\GerenciadorTarefas.API\GerenciadorTarefas.API.csproj" />
+	</ItemGroup>
+
+</Project>

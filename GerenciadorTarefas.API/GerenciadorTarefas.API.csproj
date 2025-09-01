@@ -4,17 +4,21 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+
+		<!-- Necessário para testes funcionais com WebApplicationFactory -->
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+		<CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!-- Entity Framework Core alinhado para versão 8 -->
+		<!-- Entity Framework Core -->
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 
-		<!-- Provider PostgreSQL compatível com EF Core 8 -->
+		<!-- Provider PostgreSQL -->
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
 
 		<!-- Swagger / OpenAPI -->

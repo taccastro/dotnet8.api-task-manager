@@ -10,7 +10,7 @@
 
 ---
 
-> ⚠️ **Este projeto está em desenvolvimento. Funcionalidades e documentação podem mudar a qualquer momento.**
+> ⚠️ **Este projeto está em desenvolvimento. Funcionalidades e documentação podem mudar a qualquer momento. EM DESENV**
 
 ---
 

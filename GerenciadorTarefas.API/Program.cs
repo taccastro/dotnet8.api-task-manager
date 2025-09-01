@@ -79,10 +79,10 @@ app.MapControllers();
 //    Console.WriteLine($"Erro ao salvar a tarefa: {ex.Message}");
 //    if (ex.InnerException != null)
 //        Console.WriteLine($"Detalhe interno: {ex.InnerException.Message}");
-}
+//}
 
-var count = await db.Tarefas.CountAsync();
-    Console.WriteLine($"Total de tarefas no banco: {count}");
+//var count = await db.Tarefas.CountAsync();
+//    Console.WriteLine($"Total de tarefas no banco: {count}");
 
 
 // ----------------------

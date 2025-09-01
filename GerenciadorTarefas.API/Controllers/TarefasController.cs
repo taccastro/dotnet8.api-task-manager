@@ -1,4 +1,4 @@
-﻿using GerenciadorTarefas.API.Modelos;
+﻿using GerenciadorTarefas.API.Modelos.Dados;
 using GerenciadorTarefas.API.Servicos;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,48 +6,50 @@ namespace GerenciadorTarefas.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TarefasController : ControllerBase
+    public class TarefaController : ControllerBase
     {
-        private readonly TarefaServico _servico;
+        private readonly TarefaServico _service;
 
-        public TarefasController(TarefaServico servico)
+        public TarefaController(TarefaServico service)
         {
-            _servico = servico;
+            _service = service;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Listar()
+        public async Task<ActionResult<List<TarefaDto>>> Listar()
         {
-            var tarefas = await _servico.ListarTarefasAsync();
+            var tarefas = await _service.ListarAsync();
             return Ok(tarefas);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Obter(Guid id)
+        public async Task<ActionResult<TarefaDto>> Obter(Guid id)
         {
-            var tarefa = await _servico.ObterTarefaAsync(id);
-            return tarefa != null ? Ok(tarefa) : NotFound();
+            var tarefa = await _service.ObterPorIdAsync(id);
+            if (tarefa == null) return NotFound();
+            return Ok(tarefa);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Criar([FromBody] Tarefa tarefa)
+        public async Task<ActionResult<TarefaDto>> Criar(TarefaCriarDto dto)
         {
-            await _servico.CriarTarefaAsync(tarefa);
-            return CreatedAtAction(nameof(Obter), new { id = tarefa.Id }, tarefa);
+            var novaTarefa = await _service.CriarAsync(dto);
+            return CreatedAtAction(nameof(Obter), new { id = novaTarefa.Id }, novaTarefa);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Atualizar(Guid id, [FromBody] Tarefa tarefa)
+        public async Task<ActionResult<TarefaDto>> Atualizar(Guid id, TarefaAtualizarDto dto)
         {
-            if (id != tarefa.Id) return BadRequest();
-            await _servico.AtualizarTarefaAsync(tarefa);
-            return NoContent();
+            var tarefaAtualizada = await _service.AtualizarAsync(id, dto);
+            if (tarefaAtualizada == null) return NotFound();
+            return Ok(tarefaAtualizada);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Remover(Guid id)
+        public async Task<ActionResult> Deletar(Guid id)
         {
-            await _servico.RemoverTarefaAsync(id);
+            var deletado = await _service.DeletarAsync(id);
+            if (!deletado) return NotFound();
             return NoContent();
         }
     }

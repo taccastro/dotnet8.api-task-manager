@@ -1,40 +1,103 @@
 ﻿using GerenciadorTarefas.API.Modelos;
-using GerenciadorTarefas.API.Repositorios;
+using GerenciadorTarefas.API.Modelos.Dados;
+using Microsoft.EntityFrameworkCore;
 
 namespace GerenciadorTarefas.API.Servicos
 {
     public class TarefaServico
     {
-        private readonly ITarefaRepositorio _repositorio;
+        private readonly TarefaDbContext _db;
 
-        public TarefaServico(ITarefaRepositorio repositorio)
+        public TarefaServico(TarefaDbContext db)
         {
-            _repositorio = repositorio;
+            _db = db;
         }
 
-        public async Task<List<Tarefa>> ListarTarefasAsync()
+        // Listar todas
+        public async Task<List<TarefaDto>> ListarAsync()
         {
-            return await _repositorio.ListarTodasTarefas();
+            return await _db.Tarefas
+                .Select(t => new TarefaDto
+                {
+                    Id = t.Id,
+                    Titulo = t.Titulo,
+                    Descricao = t.Descricao,
+                    Categoria = t.Categoria,
+                    CriadaEm = t.DataCriacao
+                }).ToListAsync();
         }
 
-        public async Task<Tarefa> ObterTarefaAsync(Guid id)
+        // Obter por Id
+        public async Task<TarefaDto?> ObterPorIdAsync(Guid id)
         {
-            return await _repositorio.ObterTarefaPorId(id);
+            var t = await _db.Tarefas.FindAsync(id);
+            if (t == null) return null;
+            return new TarefaDto
+            {
+                Id = t.Id,
+                Titulo = t.Titulo,
+                Descricao = t.Descricao,
+                Categoria = t.Categoria,
+                CriadaEm = t.DataCriacao
+            };
         }
 
-        public async Task CriarTarefaAsync(Tarefa tarefa)
+        // Criar
+        public async Task<TarefaDto> CriarAsync(TarefaCriarDto dto)
         {
-            await _repositorio.AdicionarTarefa(tarefa);
+            var tarefa = new Tarefa
+            {
+                Id = Guid.NewGuid(),
+                Titulo = dto.Titulo,
+                Descricao = dto.Descricao,
+                Categoria = dto.Categoria,
+                DataCriacao = DateTime.UtcNow
+            };
+
+            _db.Tarefas.Add(tarefa);
+            await _db.SaveChangesAsync();
+
+            return new TarefaDto
+            {
+                Id = tarefa.Id,
+                Titulo = tarefa.Titulo,
+                Descricao = tarefa.Descricao,
+                Categoria = tarefa.Categoria,
+                CriadaEm = tarefa.DataCriacao
+            };
         }
 
-        public async Task AtualizarTarefaAsync(Tarefa tarefa)
+        // Atualizar
+        public async Task<TarefaDto?> AtualizarAsync(Guid id, TarefaAtualizarDto dto)
         {
-            await _repositorio.AtualizarTarefa(tarefa);
+            var tarefa = await _db.Tarefas.FindAsync(id);
+            if (tarefa == null) return null;
+
+            tarefa.Titulo = dto.Titulo;
+            tarefa.Descricao = dto.Descricao;
+            tarefa.Categoria = dto.Categoria;
+
+            await _db.SaveChangesAsync();
+
+            return new TarefaDto
+            {
+                Id = tarefa.Id,
+                Titulo = tarefa.Titulo,
+                Descricao = tarefa.Descricao,
+                Categoria = tarefa.Categoria,
+                CriadaEm = tarefa.DataCriacao
+            };
         }
 
-        public async Task RemoverTarefaAsync(Guid id)
+        // Deletar
+        public async Task<bool> DeletarAsync(Guid id)
         {
-            await _repositorio.RemoverTarefa(id);
+            var tarefa = await _db.Tarefas.FindAsync(id);
+            if (tarefa == null) return false;
+
+            _db.Tarefas.Remove(tarefa);
+            await _db.SaveChangesAsync();
+            return true;
         }
     }
 }

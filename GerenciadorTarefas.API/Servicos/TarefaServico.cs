@@ -23,7 +23,7 @@ namespace GerenciadorTarefas.API.Servicos
                     Titulo = t.Titulo,
                     Descricao = t.Descricao,
                     Categoria = t.Categoria,
-                    CriadaEm = t.DataCriacao
+                    DataCriacao = t.DataCriacao
                 }).ToListAsync();
         }
 
@@ -38,7 +38,7 @@ namespace GerenciadorTarefas.API.Servicos
                 Titulo = t.Titulo,
                 Descricao = t.Descricao,
                 Categoria = t.Categoria,
-                CriadaEm = t.DataCriacao
+                DataCriacao = t.DataCriacao
             };
         }
 
@@ -63,7 +63,7 @@ namespace GerenciadorTarefas.API.Servicos
                 Titulo = tarefa.Titulo,
                 Descricao = tarefa.Descricao,
                 Categoria = tarefa.Categoria,
-                CriadaEm = tarefa.DataCriacao
+                DataCriacao = tarefa.DataCriacao
             };
         }
 
@@ -85,7 +85,7 @@ namespace GerenciadorTarefas.API.Servicos
                 Titulo = tarefa.Titulo,
                 Descricao = tarefa.Descricao,
                 Categoria = tarefa.Categoria,
-                CriadaEm = tarefa.DataCriacao
+                DataCriacao = tarefa.DataCriacao
             };
         }
 

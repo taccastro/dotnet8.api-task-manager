@@ -1,3 +1,4 @@
+using GerenciadorTarefas.API.Middlewares;
 using GerenciadorTarefas.API.Modelos;
 using GerenciadorTarefas.API.Modelos.Dados;
 using GerenciadorTarefas.API.Repositorios;
@@ -88,4 +89,8 @@ app.MapControllers();
 // ----------------------
 // Rodar aplicação
 // ----------------------
+
+app.UseMiddleware<ExceptionMiddleware>();
+
+
 app.Run();

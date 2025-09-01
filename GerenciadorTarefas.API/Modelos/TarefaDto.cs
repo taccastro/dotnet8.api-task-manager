@@ -6,6 +6,6 @@
         public string Titulo { get; set; } = string.Empty;
         public string Descricao { get; set; } = string.Empty;
         public string Categoria { get; set; } = string.Empty;
-        public DateTime CriadaEm { get; set; }
+        public DateTime DataCriacao { get; set; }
     }
 }

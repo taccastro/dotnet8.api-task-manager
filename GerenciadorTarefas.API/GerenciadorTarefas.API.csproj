@@ -8,7 +8,13 @@
 		<!-- Necessário para testes funcionais com WebApplicationFactory -->
 		<PreserveCompilationContext>true</PreserveCompilationContext>
 		<CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
+		<UserSecretsId>96cdb467-c444-473a-a3c5-ac27dc8d21a4</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Dockerfile.cs" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<!-- Entity Framework Core -->
@@ -17,6 +23,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
 
 		<!-- Provider PostgreSQL -->
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />

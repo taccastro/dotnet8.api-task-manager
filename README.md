@@ -5,6 +5,7 @@
 ![Badge](https://img.shields.io/badge/SOLID-purple)
 ![Badge](https://img.shields.io/badge/Docker-lightgrey)
 ![Badge](https://img.shields.io/badge/Kubernetes-lightblue)
+![Badge](https://img.shields.io/badge/Redis-orange)
 
 > API para gerenciamento de tarefas, desenvolvida para praticar e experimentar tecnologias modernas do ecossistema .NET.
 
@@ -26,12 +27,13 @@ Este projeto nasceu com a ideia de criar uma API escalável e testável utilizan
 - Middleware para tratamento global de exceções
 - Documentação automática via Swagger/OpenAPI
 - Estrutura inicial para autenticação e notificações (em desenvolvimento)
+- **Cache Redis implementado** para otimizar buscas e listagens
 
 ---
 
 ## 🚧 Próximos passos e integrações planejadas
 
-- [ ] **Redis:** Implementar cache para otimizar buscas e listagens
+- [x] **Redis:** Cache implementado e funcionando
 - [ ] **RabbitMQ:** Publicar eventos ao criar, atualizar ou remover tarefas
 - [ ] **MongoDB:** Armazenar logs ou histórico de alterações
 - [ ] **Prometheus & Grafana:** Expor métricas da API e criar dashboards de monitoramento
@@ -50,12 +52,11 @@ Este projeto nasceu com a ideia de criar uma API escalável e testável utilizan
 | PostgreSQL            | ✅ Pronto   | Banco de dados relacional             |
 | Docker                | ⚠️ Parcial  | Conteinerização (falta documentação)  |
 | Kubernetes            | ⏳ Pendente | Orquestração (a testar/documentar)    |
-| Redis                 | ⏳ Pendente | Cache (a implementar)                 |
+| Redis                 | ✅ Pronto   | Cache distribuído para otimização     |
 | RabbitMQ              | ⏳ Pendente | Mensageria (a implementar)            |
 | MongoDB               | ⏳ Pendente | Logs/histórico (a implementar)        |
 | Nginx                 | ⏳ Pendente | Reverse proxy (a documentar)          |
 | Prometheus & Grafana  | ⏳ Pendente | Monitoramento (a implementar)         |
-
 
 ---
 
@@ -63,13 +64,54 @@ Este projeto nasceu com a ideia de criar uma API escalável e testável utilizan
 
 1. **Pré-requisitos:**
    - [.NET 8 SDK](https://dotnet.microsoft.com/download)
-   - [Docker](https://www.docker.com/) (opcional, para banco e serviços externos)
+   - [Docker](https://www.docker.com/) (opcional, para banco e Redis)
 
 2. **Configuração do banco:**
    - O projeto está configurado para usar PostgreSQL via Entity Framework Core.
-   - Para rodar localmente, ajuste a connection string em `appsettings.json`.
+   - Ajuste a connection string em `appsettings.json`:
 
-3. **Executando a API:**
-   ```bash
-   dotnet build
-   dotnet run
+```json
+"ConnectionStrings": {
+  "BancoPostgreSQL": "Host=localhost;Port=5432;Database=GerenciadorTarefas;Username=postgres;Password=123456"
+}
+
+Configuração do Redis:
+
+Ajuste em appsettings.json:
+
+"Redis": {
+  "Servidor": "localhost",
+  "Porta": 6379
+}
+
+Para rodar via Docker (opcional):
+docker run -d --name redis-local -p 6379:6379 redis:latest
+
+
+Executando a API:
+dotnet build
+dotnet run
+
+
+Testando Redis:
+
+Faça um GET /tarefas:
+
+Primeira vez: dados vêm do banco, cache será preenchido.
+
+Console mostrará: Buscando tarefas no banco...
+
+Faça outro GET /tarefas:
+
+Dados são retornados do Redis.
+
+Console mostrará: Retornando tarefas do cache
+
+Adicione/Atualize/Remova tarefas:
+
+Cache global e individual é invalidado.
+
+Próximo GET vai buscar no banco novamente e atualizar o cache.
+
+Para debug: use forcarRefresh = true no método ListarTodasTarefas() para ignorar o cache.
+

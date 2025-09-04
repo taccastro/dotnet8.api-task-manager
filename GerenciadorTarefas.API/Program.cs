@@ -1,14 +1,14 @@
 using GerenciadorTarefas.API.Middlewares;
-using GerenciadorTarefas.API.Modelos;
 using GerenciadorTarefas.API.Modelos.Dados;
 using GerenciadorTarefas.API.Repositorios;
 using GerenciadorTarefas.API.Servicos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ----------------------
-// Configuração do banco
+// Configuração do PostgreSQL
 // ----------------------
 builder.Services.AddDbContext<TarefaDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("BancoPostgreSQL")));
@@ -16,29 +16,18 @@ builder.Services.AddDbContext<TarefaDbContext>(options =>
 // ----------------------
 // Configuração do Redis
 // ----------------------
-var redisServidor = builder.Configuration.GetSection("Redis")["Servidor"];
-var redisPorta = builder.Configuration.GetSection("Redis")["Porta"];
-// Aqui você pode configurar serviços Redis se precisar
-
-// ----------------------
-// Configuração do RabbitMQ
-// ----------------------
-var rabbitHost = builder.Configuration.GetSection("RabbitMQ")["Host"];
-var rabbitPorta = builder.Configuration.GetSection("RabbitMQ")["Porta"];
-var rabbitUsuario = builder.Configuration.GetSection("RabbitMQ")["Usuario"];
-var rabbitSenha = builder.Configuration.GetSection("RabbitMQ")["Senha"];
-// Aqui você pode configurar serviços RabbitMQ se precisar
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    var servidor = builder.Configuration["Redis:Servidor"];
+    var porta = builder.Configuration["Redis:Porta"];
+    options.Configuration = $"{servidor}:{porta}";
+    options.InstanceName = "TarefasCache:";
+});
 
 // ----------------------
 // Serviços internos
 // ----------------------
-// Para usar PostgreSQL
 builder.Services.AddScoped<ITarefaRepositorio, TarefaRepositorioPostgres>();
-
-// OU para usar em memória
-/*builder.Services.AddSingleton<ITarefaRepositorio, TarefaRepositorioMemoria>(*/);
-
-
 builder.Services.AddScoped<TarefaServico>();
 
 // ----------------------
@@ -64,5 +53,14 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseMiddleware<ExceptionMiddleware>();
 
+// ----------------------
+// Seed de tarefas (popula PostgreSQL e Redis)
+// ----------------------
+using (var scope = app.Services.CreateScope())
+{
+    var contexto = scope.ServiceProvider.GetRequiredService<TarefaDbContext>();
+    var cache = scope.ServiceProvider.GetRequiredService<IDistributedCache>();
+    await SeedTarefas.PopularAsync(contexto, cache);
+}
 
 app.Run();

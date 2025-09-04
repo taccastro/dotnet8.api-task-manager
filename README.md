@@ -1,4 +1,4 @@
-﻿# Gerenciador de Tarefas
+# Gerenciador de Tarefas
 
 ![Badge](https://img.shields.io/badge/.NET-8-blue)
 ![Badge](https://img.shields.io/badge/Async--Await-green)
@@ -67,51 +67,10 @@ Este projeto nasceu com a ideia de criar uma API escalável e testável utilizan
    - [Docker](https://www.docker.com/) (opcional, para banco e Redis)
 
 2. **Configuração do banco:**
-   - O projeto está configurado para usar PostgreSQL via Entity Framework Core.
+   - O projeto usa PostgreSQL via Entity Framework Core.
    - Ajuste a connection string em `appsettings.json`:
 
 ```json
 "ConnectionStrings": {
   "BancoPostgreSQL": "Host=localhost;Port=5432;Database=GerenciadorTarefas;Username=postgres;Password=123456"
 }
-
-Configuração do Redis:
-
-Ajuste em appsettings.json:
-
-"Redis": {
-  "Servidor": "localhost",
-  "Porta": 6379
-}
-
-Para rodar via Docker (opcional):
-docker run -d --name redis-local -p 6379:6379 redis:latest
-
-
-Executando a API:
-dotnet build
-dotnet run
-
-
-Testando Redis:
-
-Faça um GET /tarefas:
-
-Primeira vez: dados vêm do banco, cache será preenchido.
-
-Console mostrará: Buscando tarefas no banco...
-
-Faça outro GET /tarefas:
-
-Dados são retornados do Redis.
-
-Console mostrará: Retornando tarefas do cache
-
-Adicione/Atualize/Remova tarefas:
-
-Cache global e individual é invalidado.
-
-Próximo GET vai buscar no banco novamente e atualizar o cache.
-
-Para debug: use forcarRefresh = true no método ListarTodasTarefas() para ignorar o cache.
-

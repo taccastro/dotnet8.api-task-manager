@@ -32,7 +32,13 @@ var rabbitSenha = builder.Configuration.GetSection("RabbitMQ")["Senha"];
 // ----------------------
 // Serviços internos
 // ----------------------
-builder.Services.AddSingleton<ITarefaRepositorio, TarefaRepositorioMemoria>();
+// Para usar PostgreSQL
+builder.Services.AddScoped<ITarefaRepositorio, TarefaRepositorioPostgres>();
+
+// OU para usar em memória
+/*builder.Services.AddSingleton<ITarefaRepositorio, TarefaRepositorioMemoria>(*/);
+
+
 builder.Services.AddScoped<TarefaServico>();
 
 // ----------------------
@@ -56,40 +62,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
-// ----------------------
-// Teste rápido do banco
-// ----------------------
-//using var scope = app.Services.CreateScope();
-//var db = scope.ServiceProvider.GetRequiredService<TarefaDbContext>();
-
-//try
-//{
-//    db.Tarefas.Add(new Tarefa
-//    {
-//        Titulo = "Teste inicial",
-//        Descricao = "Primeira tarefa",
-//        Categoria = "Geral" 
-//    });
-
-//    await db.SaveChangesAsync();
-//    Console.WriteLine("Tarefa salva com sucesso!");
-//}
-//catch (DbUpdateException ex)
-//{
-//    Console.WriteLine($"Erro ao salvar a tarefa: {ex.Message}");
-//    if (ex.InnerException != null)
-//        Console.WriteLine($"Detalhe interno: {ex.InnerException.Message}");
-//}
-
-//var count = await db.Tarefas.CountAsync();
-//    Console.WriteLine($"Total de tarefas no banco: {count}");
-
-
-// ----------------------
-// Rodar aplicação
-// ----------------------
-
 app.UseMiddleware<ExceptionMiddleware>();
 
 

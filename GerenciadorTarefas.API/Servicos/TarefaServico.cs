@@ -1,37 +1,38 @@
 ﻿using GerenciadorTarefas.API.Modelos;
 using GerenciadorTarefas.API.Modelos.Dados;
-using Microsoft.EntityFrameworkCore;
+using GerenciadorTarefas.API.Repositorios;
 
 namespace GerenciadorTarefas.API.Servicos
 {
     public class TarefaServico
     {
-        private readonly TarefaDbContext _db;
+        private readonly ITarefaRepositorio _repositorio;
 
-        public TarefaServico(TarefaDbContext db)
+        public TarefaServico(ITarefaRepositorio repositorio)
         {
-            _db = db;
+            _repositorio = repositorio;
         }
 
         // Listar todas
         public async Task<List<TarefaDto>> ListarAsync()
         {
-            return await _db.Tarefas
-                .Select(t => new TarefaDto
-                {
-                    Id = t.Id,
-                    Titulo = t.Titulo,
-                    Descricao = t.Descricao,
-                    Categoria = t.Categoria,
-                    DataCriacao = t.DataCriacao
-                }).ToListAsync();
+            var tarefas = await _repositorio.ListarTodasTarefas();
+            return tarefas.Select(t => new TarefaDto
+            {
+                Id = t.Id,
+                Titulo = t.Titulo,
+                Descricao = t.Descricao,
+                Categoria = t.Categoria,
+                DataCriacao = t.DataCriacao
+            }).ToList();
         }
 
         // Obter por Id
         public async Task<TarefaDto?> ObterPorIdAsync(Guid id)
         {
-            var t = await _db.Tarefas.FindAsync(id);
+            var t = await _repositorio.ObterTarefaPorId(id);
             if (t == null) return null;
+
             return new TarefaDto
             {
                 Id = t.Id,
@@ -47,15 +48,12 @@ namespace GerenciadorTarefas.API.Servicos
         {
             var tarefa = new Tarefa
             {
-                Id = Guid.NewGuid(),
                 Titulo = dto.Titulo,
                 Descricao = dto.Descricao,
-                Categoria = dto.Categoria,
-                DataCriacao = DateTime.UtcNow
+                Categoria = dto.Categoria
             };
 
-            _db.Tarefas.Add(tarefa);
-            await _db.SaveChangesAsync();
+            await _repositorio.AdicionarTarefa(tarefa);
 
             return new TarefaDto
             {
@@ -70,14 +68,14 @@ namespace GerenciadorTarefas.API.Servicos
         // Atualizar
         public async Task<TarefaDto?> AtualizarAsync(Guid id, TarefaAtualizarDto dto)
         {
-            var tarefa = await _db.Tarefas.FindAsync(id);
+            var tarefa = await _repositorio.ObterTarefaPorId(id);
             if (tarefa == null) return null;
 
             tarefa.Titulo = dto.Titulo;
             tarefa.Descricao = dto.Descricao;
             tarefa.Categoria = dto.Categoria;
 
-            await _db.SaveChangesAsync();
+            await _repositorio.AtualizarTarefa(tarefa);
 
             return new TarefaDto
             {
@@ -92,11 +90,10 @@ namespace GerenciadorTarefas.API.Servicos
         // Deletar
         public async Task<bool> DeletarAsync(Guid id)
         {
-            var tarefa = await _db.Tarefas.FindAsync(id);
+            var tarefa = await _repositorio.ObterTarefaPorId(id);
             if (tarefa == null) return false;
 
-            _db.Tarefas.Remove(tarefa);
-            await _db.SaveChangesAsync();
+            await _repositorio.RemoverTarefa(id);
             return true;
         }
     }

@@ -7,10 +7,11 @@ namespace GerenciadorTarefas.API.Repositorios
 {
     public class TarefaRepositorioPostgres : ITarefaRepositorio
     {
-        private readonly TarefaDbContext _contexto;
+               private readonly TarefaDbContext _contexto;
 
         public TarefaRepositorioPostgres(TarefaDbContext contexto)
         {
+            Console.WriteLine("🚀 Usando TarefaRepositorioPostgres");
             _contexto = contexto;
         }
 

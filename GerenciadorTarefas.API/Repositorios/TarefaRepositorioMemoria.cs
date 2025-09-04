@@ -4,6 +4,11 @@ namespace GerenciadorTarefas.API.Repositorios
 {
     public class TarefaRepositorioMemoria : ITarefaRepositorio
     {
+        public TarefaRepositorioMemoria()
+        {
+            Console.WriteLine("🚀 Usando TarefaRepositorioMemoria");
+        }
+
         private readonly List<Tarefa> _tarefas = new();
 
         public Task<List<Tarefa>> ListarTodasTarefas()

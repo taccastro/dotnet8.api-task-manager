@@ -6,6 +6,7 @@ using GerenciadorTarefas.API.Servicos;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using Moq;
 
 namespace GerenciadorTarefas.Tests
 {
@@ -15,7 +16,8 @@ namespace GerenciadorTarefas.Tests
         public async Task CriarTarefa_DeveFuncionar()
         {
             var repositorio = new TarefaRepositorioMemoria();
-            var service = new TarefaServico(repositorio);
+            var mockRabbitMQ = new Mock<IRabbitMQPublisher>();
+            var service = new TarefaServico(repositorio, mockRabbitMQ.Object);
 
             var dto = new TarefaCriarDto
             {
@@ -35,7 +37,8 @@ namespace GerenciadorTarefas.Tests
         public async Task ListarTarefas_DeveFuncionar()
         {
             var repositorio = new TarefaRepositorioMemoria();
-            var service = new TarefaServico(repositorio);
+            var mockRabbitMQ = new Mock<IRabbitMQPublisher>();
+            var service = new TarefaServico(repositorio, mockRabbitMQ.Object);
 
             await service.CriarAsync(new TarefaCriarDto { Titulo = "T1", Descricao = "D1", Categoria = "C1" });
             await service.CriarAsync(new TarefaCriarDto { Titulo = "T2", Descricao = "D2", Categoria = "C2" });
@@ -49,7 +52,8 @@ namespace GerenciadorTarefas.Tests
         public async Task ObterPorId_DeveFuncionar()
         {
             var repositorio = new TarefaRepositorioMemoria();
-            var service = new TarefaServico(repositorio);
+            var mockRabbitMQ = new Mock<IRabbitMQPublisher>();
+            var service = new TarefaServico(repositorio, mockRabbitMQ.Object);
 
             var tarefa = await service.CriarAsync(new TarefaCriarDto
             {
@@ -67,7 +71,8 @@ namespace GerenciadorTarefas.Tests
         public async Task AtualizarTarefa_DeveFuncionar()
         {
             var repositorio = new TarefaRepositorioMemoria();
-            var service = new TarefaServico(repositorio);
+            var mockRabbitMQ = new Mock<IRabbitMQPublisher>();
+            var service = new TarefaServico(repositorio, mockRabbitMQ.Object);
 
             var tarefa = await service.CriarAsync(new TarefaCriarDto
             {
@@ -91,7 +96,8 @@ namespace GerenciadorTarefas.Tests
         public async Task DeletarTarefa_DeveFuncionar()
         {
             var repositorio = new TarefaRepositorioMemoria();
-            var service = new TarefaServico(repositorio);
+            var mockRabbitMQ = new Mock<IRabbitMQPublisher>();
+            var service = new TarefaServico(repositorio, mockRabbitMQ.Object);
 
             var tarefa = await service.CriarAsync(new TarefaCriarDto
             {

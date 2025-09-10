@@ -1,20 +1,22 @@
-using GerenciadorTarefas.API.Middlewares;
+ï»¿using GerenciadorTarefas.API.Middlewares;
 using GerenciadorTarefas.API.Modelos.Dados;
 using GerenciadorTarefas.API.Repositorios;
 using GerenciadorTarefas.API.Servicos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using RabbitMQ.Client;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ----------------------
-// Configuração do PostgreSQL
+// ConfiguraÃ§Ã£o do PostgreSQL
 // ----------------------
 builder.Services.AddDbContext<TarefaDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("BancoPostgreSQL")));
 
 // ----------------------
-// Configuração do Redis
+// ConfiguraÃ§Ã£o do Redis
 // ----------------------
 builder.Services.AddStackExchangeRedisCache(options =>
 {
@@ -25,10 +27,11 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 // ----------------------
-// Serviços internos
+// ServiÃ§os internos
 // ----------------------
 builder.Services.AddScoped<ITarefaRepositorio, TarefaRepositorioPostgres>();
 builder.Services.AddScoped<TarefaServico>();
+builder.Services.AddSingleton<IRabbitMQPublisher, RabbitMQPublisher>();
 
 // ----------------------
 // Controllers e Swagger
@@ -53,14 +56,6 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseMiddleware<ExceptionMiddleware>();
 
-// ----------------------
-// Seed de tarefas (popula PostgreSQL e Redis)
-// ----------------------
-using (var scope = app.Services.CreateScope())
-{
-    var contexto = scope.ServiceProvider.GetRequiredService<TarefaDbContext>();
-    var cache = scope.ServiceProvider.GetRequiredService<IDistributedCache>();
-    await SeedTarefas.PopularAsync(contexto, cache);
-}
+
 
 app.Run();

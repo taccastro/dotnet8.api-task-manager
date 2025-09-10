@@ -7,10 +7,12 @@ namespace GerenciadorTarefas.API.Servicos
     public class TarefaServico
     {
         private readonly ITarefaRepositorio _repositorio;
+        private readonly IRabbitMQPublisher _rabbitMQ;
 
-        public TarefaServico(ITarefaRepositorio repositorio)
+        public TarefaServico(ITarefaRepositorio repositorio, IRabbitMQPublisher rabbitMQ)
         {
             _repositorio = repositorio;
+            _rabbitMQ = rabbitMQ;
         }
 
         // Listar todas
@@ -55,6 +57,18 @@ namespace GerenciadorTarefas.API.Servicos
 
             await _repositorio.AdicionarTarefa(tarefa);
 
+            // Publicar evento no RabbitMQ
+            var evento = new
+            {
+                Tipo = "TarefaCriada",
+                Id = tarefa.Id,
+                Titulo = tarefa.Titulo,
+                Categoria = tarefa.Categoria,
+                DataCriacao = tarefa.DataCriacao,
+                Timestamp = DateTime.UtcNow
+            };
+            _rabbitMQ.Publish(System.Text.Json.JsonSerializer.Serialize(evento));
+
             return new TarefaDto
             {
                 Id = tarefa.Id,
@@ -77,6 +91,18 @@ namespace GerenciadorTarefas.API.Servicos
 
             await _repositorio.AtualizarTarefa(tarefa);
 
+            // Publicar evento no RabbitMQ
+            var evento = new
+            {
+                Tipo = "TarefaAtualizada",
+                Id = tarefa.Id,
+                Titulo = tarefa.Titulo,
+                Categoria = tarefa.Categoria,
+                DataCriacao = tarefa.DataCriacao,
+                Timestamp = DateTime.UtcNow
+            };
+            _rabbitMQ.Publish(System.Text.Json.JsonSerializer.Serialize(evento));
+
             return new TarefaDto
             {
                 Id = tarefa.Id,
@@ -94,6 +120,18 @@ namespace GerenciadorTarefas.API.Servicos
             if (tarefa == null) return false;
 
             await _repositorio.RemoverTarefa(id);
+
+            // Publicar evento no RabbitMQ
+            var evento = new
+            {
+                Tipo = "TarefaRemovida",
+                Id = id,
+                Titulo = tarefa.Titulo,
+                Categoria = tarefa.Categoria,
+                Timestamp = DateTime.UtcNow
+            };
+            _rabbitMQ.Publish(System.Text.Json.JsonSerializer.Serialize(evento));
+
             return true;
         }
     }

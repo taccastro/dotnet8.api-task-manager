@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch API",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/GerenciadorTarefas.API/bin/Debug/net8.0/GerenciadorTarefas.API.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/GerenciadorTarefas.API",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        }
+    ]
+}

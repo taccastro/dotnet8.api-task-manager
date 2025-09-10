@@ -28,7 +28,7 @@
 
 		<!-- Provider PostgreSQL -->
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
-		<PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
+		<PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
 
 		<!-- Swagger / OpenAPI -->
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />

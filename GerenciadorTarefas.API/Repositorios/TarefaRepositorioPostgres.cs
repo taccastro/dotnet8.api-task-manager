@@ -58,7 +58,7 @@ namespace GerenciadorTarefas.API.Repositorios
         }
 
         // --- OBTER POR ID ---
-        public async Task<Tarefa> ObterTarefaPorId(Guid id)
+        public async Task<Tarefa?> ObterTarefaPorId(Guid id)
         {
             string cacheKey = $"tarefas:{id}";
 

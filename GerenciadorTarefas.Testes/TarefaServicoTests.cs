@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using Moq;
 
 namespace GerenciadorTarefas.Tests
 {
@@ -17,12 +18,13 @@ namespace GerenciadorTarefas.Tests
         {
             // Arrange
             var repositorio = new TarefaRepositorioMemoria();
-            var service = new TarefaServico(repositorio);
+            var mockRabbitMQ = new Mock<IRabbitMQPublisher>();
+            var service = new TarefaServico(repositorio, mockRabbitMQ.Object);
 
             var dto = new TarefaCriarDto
             {
                 Titulo = "Teste",
-                Descricao = "Descrição",
+                Descricao = "Descriï¿½ï¿½o",
                 Categoria = "Geral"
             };
 
@@ -33,7 +35,7 @@ namespace GerenciadorTarefas.Tests
             var tarefasNoDb = await repositorio.ListarTodasTarefas();
             tarefasNoDb.Count.Should().Be(1);
             tarefa.Titulo.Should().Be("Teste");
-            tarefa.Descricao.Should().Be("Descrição");
+            tarefa.Descricao.Should().Be("Descriï¿½ï¿½o");
             tarefa.Categoria.Should().Be("Geral");
         }
 
@@ -41,7 +43,8 @@ namespace GerenciadorTarefas.Tests
         public async Task ListarAsync_DeveRetornarTodasTarefas()
         {
             var repositorio = new TarefaRepositorioMemoria();
-            var service = new TarefaServico(repositorio);
+            var mockRabbitMQ = new Mock<IRabbitMQPublisher>();
+            var service = new TarefaServico(repositorio, mockRabbitMQ.Object);
 
             await service.CriarAsync(new TarefaCriarDto { Titulo = "T1", Descricao = "D1", Categoria = "G1" });
             await service.CriarAsync(new TarefaCriarDto { Titulo = "T2", Descricao = "D2", Categoria = "G2" });
@@ -54,7 +57,8 @@ namespace GerenciadorTarefas.Tests
         public async Task ObterPorIdAsync_DeveRetornarTarefa()
         {
             var repositorio = new TarefaRepositorioMemoria();
-            var service = new TarefaServico(repositorio);
+            var mockRabbitMQ = new Mock<IRabbitMQPublisher>();
+            var service = new TarefaServico(repositorio, mockRabbitMQ.Object);
 
             var dto = new TarefaCriarDto { Titulo = "T1", Descricao = "D1", Categoria = "G1" };
             var criada = await service.CriarAsync(dto);
@@ -68,7 +72,8 @@ namespace GerenciadorTarefas.Tests
         public async Task DeletarAsync_DeveRemoverTarefa()
         {
             var repositorio = new TarefaRepositorioMemoria();
-            var service = new TarefaServico(repositorio);
+            var mockRabbitMQ = new Mock<IRabbitMQPublisher>();
+            var service = new TarefaServico(repositorio, mockRabbitMQ.Object);
 
             var dto = new TarefaCriarDto { Titulo = "T1", Descricao = "D1", Categoria = "G1" };
             var criada = await service.CriarAsync(dto);

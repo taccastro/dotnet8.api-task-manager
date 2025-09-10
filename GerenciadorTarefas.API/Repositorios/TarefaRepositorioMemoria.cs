@@ -16,7 +16,7 @@ namespace GerenciadorTarefas.API.Repositorios
             return Task.FromResult(_tarefas);
         }
 
-        public Task<Tarefa> ObterTarefaPorId(Guid id)
+        public Task<Tarefa?> ObterTarefaPorId(Guid id)
         {
             var tarefa = _tarefas.FirstOrDefault(t => t.Id == id);
             return Task.FromResult(tarefa);

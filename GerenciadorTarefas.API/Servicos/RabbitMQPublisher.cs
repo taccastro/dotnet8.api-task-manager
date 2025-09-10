@@ -1,36 +1,43 @@
 ﻿using RabbitMQ.Client;
-using System;
 using System.Text;
 
 namespace GerenciadorTarefas.API.Servicos
 {
-    public class RabbitMQPublisher : IDisposable
+    public class RabbitMQPublisher : IRabbitMQPublisher, IDisposable
     {
         private readonly IConnection _connection;
-        private readonly IModel _channel;
-        private const string QueueName = "tarefas-queue";
+        private readonly RabbitMQ.Client.IModel _channel;
 
-        public RabbitMQPublisher()
+        public RabbitMQPublisher(string hostName = "localhost")
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            var factory = new ConnectionFactory() { HostName = hostName };
+
+            // Conexão e canal síncronos (funciona no .NET 8)
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
 
-            _channel.QueueDeclare(queue: QueueName,
-                                  durable: false,
-                                  exclusive: false,
-                                  autoDelete: false,
-                                  arguments: null);
+            // Declara a fila no construtor
+            _channel.QueueDeclare(
+                queue: "tarefas",
+                durable: false,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null
+            );
         }
 
-        public void Publish(string message)
+        public void Publish(string mensagem)
         {
-            var body = Encoding.UTF8.GetBytes(message);
-            _channel.BasicPublish(exchange: "",
-                                  routingKey: QueueName,
-                                  basicProperties: null,
-                                  body: body);
-            Console.WriteLine($"Mensagem enviada: {message}");
+            var body = Encoding.UTF8.GetBytes(mensagem);
+
+            _channel.BasicPublish(
+                exchange: "",
+                routingKey: "tarefas",
+                basicProperties: null,
+                body: body
+            );
+
+            Console.WriteLine($"✅ Mensagem enviada: {mensagem}");
         }
 
         public void Dispose()

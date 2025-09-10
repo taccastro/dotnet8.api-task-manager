@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using GerenciadorTarefas.API.Modelos;
 using GerenciadorTarefas.API.Modelos.Dados;
 using GerenciadorTarefas.API.Repositorios;
 using GerenciadorTarefas.API.Servicos;

@@ -28,6 +28,7 @@ Este projeto nasceu com a ideia de criar uma API escalável e testável utilizan
 - Documentação automática via Swagger/OpenAPI
 - Estrutura inicial para autenticação e notificações (em desenvolvimento)
 - **Cache Redis implementado** para otimizar buscas e listagens
+- RabbitMQ: eventos básicos já implementados ✅ (Publisher e Consumer)
 
 ---
 

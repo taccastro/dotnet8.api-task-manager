@@ -3,9 +3,6 @@ using GerenciadorTarefas.API.Modelos.Dados;
 using GerenciadorTarefas.API.Repositorios;
 using GerenciadorTarefas.API.Servicos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
-using RabbitMQ.Client;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 

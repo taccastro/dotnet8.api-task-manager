@@ -1,13 +1,9 @@
 using FluentAssertions;
-using GerenciadorTarefas.API.Modelos;
 using GerenciadorTarefas.API.Modelos.Dados;
 using GerenciadorTarefas.API.Repositorios;
 using GerenciadorTarefas.API.Servicos;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
 using Moq;
+using Xunit;
 
 namespace GerenciadorTarefas.Tests
 {

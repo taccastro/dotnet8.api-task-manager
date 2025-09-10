@@ -11,10 +11,12 @@ namespace GerenciadorTarefas.API.Repositorios
 
         private readonly List<Tarefa> _tarefas = new();
 
-        public Task<List<Tarefa>> ListarTodasTarefas()
-        {
-            return Task.FromResult(_tarefas);
-        }
+        // Eventos que podem ser assinados por qualquer consumidor
+        public event Action<Tarefa>? TarefaCriada;
+        public event Action<Tarefa>? TarefaAtualizada;
+        public event Action<Guid>? TarefaRemovida;
+
+        public Task<List<Tarefa>> ListarTodasTarefas() => Task.FromResult(_tarefas);
 
         public Task<Tarefa?> ObterTarefaPorId(Guid id)
         {
@@ -27,6 +29,8 @@ namespace GerenciadorTarefas.API.Repositorios
             tarefa.Id = Guid.NewGuid();
             tarefa.DataCriacao = DateTime.UtcNow;
             _tarefas.Add(tarefa);
+
+            TarefaCriada?.Invoke(tarefa); // dispara evento
             return Task.CompletedTask;
         }
 
@@ -36,6 +40,7 @@ namespace GerenciadorTarefas.API.Repositorios
             if (index != -1)
             {
                 _tarefas[index] = tarefa;
+                TarefaAtualizada?.Invoke(tarefa); // dispara evento
             }
             return Task.CompletedTask;
         }
@@ -46,6 +51,7 @@ namespace GerenciadorTarefas.API.Repositorios
             if (tarefa != null)
             {
                 _tarefas.Remove(tarefa);
+                TarefaRemovida?.Invoke(id); // dispara evento
             }
             return Task.CompletedTask;
         }

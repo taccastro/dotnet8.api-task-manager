@@ -34,7 +34,7 @@ Este projeto nasceu com a ideia de criar uma API escalável e testável utilizan
 ## 🚧 Próximos passos e integrações planejadas
 
 - [x] **Redis:** Cache implementado e funcionando
-- [ ] **RabbitMQ:** Publicar eventos ao criar, atualizar ou remover tarefas
+- [x] **RabbitMQ:** Publicar eventos ao criar, atualizar ou remover tarefas
 - [ ] **MongoDB:** Armazenar logs ou histórico de alterações
 - [ ] **Prometheus & Grafana:** Expor métricas da API e criar dashboards de monitoramento
 - [ ] **Nginx:** Configurar como reverse proxy para produção

@@ -56,6 +56,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseMiddleware<ExceptionMiddleware>();
 
-
+//var consumer = new RabbitMQConsumer();
+//consumer.Consumir();
 
 app.Run();

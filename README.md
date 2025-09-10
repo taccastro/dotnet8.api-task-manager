@@ -28,7 +28,7 @@ Este projeto nasceu com a ideia de criar uma API escalável e testável utilizan
 - Documentação automática via Swagger/OpenAPI
 - Estrutura inicial para autenticação e notificações (em desenvolvimento)
 - **Cache Redis implementado** para otimizar buscas e listagens
-- RabbitMQ: eventos básicos já implementados ✅ (Publisher e Consumer)
+- RabbitMQ: eventos básicos já implementados (Publisher e Consumer)
 
 ---
 
@@ -54,7 +54,7 @@ Este projeto nasceu com a ideia de criar uma API escalável e testável utilizan
 | Docker                | ⚠️ Parcial  | Conteinerização (falta documentação)  |
 | Kubernetes            | ⏳ Pendente | Orquestração (a testar/documentar)    |
 | Redis                 | ✅ Pronto   | Cache distribuído para otimização     |
-| RabbitMQ              | ⏳ Pendente | Mensageria (a implementar)            |
+| RabbitMQ              | ✅ Pronto  | Mensageria (a implementar)            |
 | MongoDB               | ⏳ Pendente | Logs/histórico (a implementar)        |
 | Nginx                 | ⏳ Pendente | Reverse proxy (a documentar)          |
 | Prometheus & Grafana  | ⏳ Pendente | Monitoramento (a implementar)         |

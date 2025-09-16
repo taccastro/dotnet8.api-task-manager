@@ -1,5 +1,4 @@
-﻿using GerenciadorTarefas.API.Modelos;
-using GerenciadorTarefas.API.Modelos.Dados;
+﻿using GerenciadorTarefas.API.Modelos.Dados;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;

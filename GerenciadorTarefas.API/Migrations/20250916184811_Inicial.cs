@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -26,13 +27,14 @@ namespace GerenciadorTarefas.API.Migrations
                 {
                     table.PrimaryKey("PK_Tarefas", x => x.Id);
                 });
+           
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Tarefas");
+                name: "Tarefas");            
         }
     }
 }

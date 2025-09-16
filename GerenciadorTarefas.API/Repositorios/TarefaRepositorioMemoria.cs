@@ -1,4 +1,4 @@
-﻿using GerenciadorTarefas.API.Modelos;
+﻿using GerenciadorTarefas.API.Modelos.Dados;
 
 namespace GerenciadorTarefas.API.Repositorios
 {

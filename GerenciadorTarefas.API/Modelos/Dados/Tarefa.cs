@@ -1,4 +1,4 @@
-﻿namespace GerenciadorTarefas.API.Modelos
+﻿namespace GerenciadorTarefas.API.Modelos.Dados
 {
     public class Tarefa
     {

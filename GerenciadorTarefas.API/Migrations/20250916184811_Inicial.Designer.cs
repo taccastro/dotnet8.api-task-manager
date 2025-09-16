@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GerenciadorTarefas.API.Migrations
 {
     [DbContext(typeof(TarefaDbContext))]
-    [Migration("20250901190123_Inicial")]
+    [Migration("20250916184811_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace GerenciadorTarefas.API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("GerenciadorTarefas.API.Modelos.Tarefa", b =>
+            modelBuilder.Entity("GerenciadorTarefas.API.Modelos.Dados.Tarefa", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,6 +55,39 @@ namespace GerenciadorTarefas.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tarefas");
+                });
+
+            modelBuilder.Entity("GerenciadorTarefas.API.Modelos.Dados.Usuario", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("SenhaHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Telefone")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
                 });
 #pragma warning restore 612, 618
         }

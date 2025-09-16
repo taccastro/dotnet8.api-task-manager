@@ -1,9 +1,11 @@
 ﻿using GerenciadorTarefas.API.Modelos.Dados;
 using GerenciadorTarefas.API.Servicos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorTarefas.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TarefaController : ControllerBase
@@ -15,6 +17,7 @@ namespace GerenciadorTarefas.API.Controllers
             _service = service;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<List<TarefaDto>>> Listar()
         {

@@ -34,6 +34,8 @@ builder.Services.AddScoped<TarefaServico>();
 builder.Services.AddSingleton<IRabbitMQPublisher, RabbitMQPublisher>();
 //builder.Services.AddSingleton<AutenticacaoServico>(); PRA USAR REPO EM MEMO
 builder.Services.AddScoped<AutenticacaoServico>();
+builder.Services.AddSingleton<LogService>();
+
 
 
 // ----------------------

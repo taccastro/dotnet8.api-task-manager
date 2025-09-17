@@ -17,7 +17,7 @@ Este projeto nasceu com a ideia de criar uma API escalável e testável utilizan
 
 ---
 
-## ⚡ Funcionalidades já implementadas
+##  Funcionalidades já implementadas
 
 - CRUD completo de tarefas (criar, listar, buscar, atualizar, remover)
 - Organização por categorias e prioridades
@@ -27,16 +27,16 @@ Este projeto nasceu com a ideia de criar uma API escalável e testável utilizan
 - Middleware para tratamento global de exceções
 - Documentação automática via Swagger/OpenAPI
 - Estrutura inicial para autenticação e notificações (em desenvolvimento)
-- **Cache Redis implementado** para otimizar buscas e listagens
+- Cache Redis implementado para otimizar buscas e listagens
 - RabbitMQ: eventos básicos já implementados (Publisher e Consumer)
-
+- MongoDB: logs básicos
 ---
 
 ## 🚧 Próximos passos e integrações planejadas
 
 - [x] **Redis:** Cache implementado e funcionando
 - [x] **RabbitMQ:** Publicar eventos ao criar, atualizar ou remover tarefas
-- [ ] **MongoDB:** Armazenar logs ou histórico de alterações
+- [x] **MongoDB:** Armazenar logs ou histórico de alterações
 - [ ] **Prometheus & Grafana:** Expor métricas da API e criar dashboards de monitoramento
 - [ ] **Nginx:** Configurar como reverse proxy para produção
 - [ ] **Autenticação/Autorização:** Implementar JWT ou OAuth2
@@ -55,23 +55,20 @@ Este projeto nasceu com a ideia de criar uma API escalável e testável utilizan
 | Kubernetes            | ⏳ Pendente | Orquestração (a testar/documentar)    |
 | Redis                 | ✅ Pronto   | Cache distribuído para otimização     |
 | RabbitMQ              | ✅ Pronto  | Mensageria (a implementar)            |
-| MongoDB               | ⏳ Pendente | Logs/histórico (a implementar)        |
+| MongoDB               | ✅ Pronto | Logs/histórico (a implementar)        |
 | Nginx                 | ⏳ Pendente | Reverse proxy (a documentar)          |
 | Prometheus & Grafana  | ⏳ Pendente | Monitoramento (a implementar)         |
 
 ---
 
-## 🚀 Como rodar o projeto
+##  Como rodar o projeto
 
 1. **Pré-requisitos:**
    - [.NET 8 SDK](https://dotnet.microsoft.com/download)
-   - [Docker](https://www.docker.com/) (opcional, para banco e Redis)
+   - [Docker](https://www.docker.com/) (RabbitMQ / REDIS / MONGO)
 
 2. **Configuração do banco:**
    - O projeto usa PostgreSQL via Entity Framework Core.
    - Ajuste a connection string em `appsettings.json`:
 
-```json
-"ConnectionStrings": {
-  "BancoPostgreSQL": "Host=localhost;Port=5432;Database=GerenciadorTarefas;Username=postgres;Password=123456"
-}
+

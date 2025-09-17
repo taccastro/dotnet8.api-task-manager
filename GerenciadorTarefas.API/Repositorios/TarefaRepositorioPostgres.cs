@@ -20,7 +20,7 @@ namespace GerenciadorTarefas.API.Repositorios
 
         public TarefaRepositorioPostgres(TarefaDbContext contexto, IDistributedCache cache)
         {
-            Console.WriteLine("🚀 Usando TarefaRepositorioPostgres com Redis");
+            Console.WriteLine(" Usando TarefaRepositorioPostgres com Redis");
             _contexto = contexto;
             _cache = cache;
         }
@@ -41,13 +41,13 @@ namespace GerenciadorTarefas.API.Repositorios
                 var cached = await _cache.GetStringAsync(cacheKey);
                 if (!string.IsNullOrEmpty(cached))
                 {
-                    Console.WriteLine("⚡ Retornando tarefas do cache");
+                    Console.WriteLine(" Retornando tarefas do cache");
                     return JsonSerializer.Deserialize<List<Tarefa>>(cached, _jsonOptions)!;
                 }
             }
 
             // BREAKPOINT garantido aqui
-            Console.WriteLine("⚡ Buscando tarefas no banco...");
+            Console.WriteLine(" Buscando tarefas no banco...");
             var tarefas = await _contexto.Tarefas.ToListAsync();
 
             await _cache.SetStringAsync(cacheKey, JsonSerializer.Serialize(tarefas, _jsonOptions),
@@ -64,7 +64,7 @@ namespace GerenciadorTarefas.API.Repositorios
             var cached = await _cache.GetStringAsync(cacheKey);
             if (!string.IsNullOrEmpty(cached))
             {
-                Console.WriteLine($"⚡ Retornando tarefa {id} do cache");
+                Console.WriteLine($" Retornando tarefa {id} do cache");
                 return JsonSerializer.Deserialize<Tarefa>(cached, _jsonOptions)!;
             }
 
@@ -89,7 +89,7 @@ namespace GerenciadorTarefas.API.Repositorios
 
             // Invalida cache
             await _cache.RemoveAsync("tarefas:all");
-            Console.WriteLine("⚡ Cache tarefas:all removido após adicionar");
+            Console.WriteLine(" Cache tarefas:all removido após adicionar");
         }
 
         // --- ATUALIZAR ---
@@ -100,7 +100,7 @@ namespace GerenciadorTarefas.API.Repositorios
 
             await _cache.RemoveAsync("tarefas:all");
             await _cache.RemoveAsync($"tarefas:{tarefa.Id}");
-            Console.WriteLine($"⚡ Cache removido para tarefas:all e tarefas:{tarefa.Id}");
+            Console.WriteLine($" Cache removido para tarefas:all e tarefas:{tarefa.Id}");
         }
 
         // --- REMOVER ---
@@ -114,7 +114,7 @@ namespace GerenciadorTarefas.API.Repositorios
 
                 await _cache.RemoveAsync("tarefas:all");
                 await _cache.RemoveAsync($"tarefas:{id}");
-                Console.WriteLine($"⚡ Tarefa {id} removida e cache invalidado");
+                Console.WriteLine($" Tarefa {id} removida e cache invalidado");
             }
         }
     }

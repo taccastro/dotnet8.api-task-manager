@@ -6,7 +6,7 @@ namespace GerenciadorTarefas.API.Repositorios
     {
         public TarefaRepositorioMemoria()
         {
-            Console.WriteLine("🚀 Usando TarefaRepositorioMemoria");
+            Console.WriteLine(" Usando TarefaRepositorioMemoria");
         }
 
         private readonly List<Tarefa> _tarefas = new();

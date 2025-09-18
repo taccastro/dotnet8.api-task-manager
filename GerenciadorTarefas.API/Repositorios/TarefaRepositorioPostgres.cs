@@ -56,6 +56,25 @@ namespace GerenciadorTarefas.API.Repositorios
             return tarefas;
         }
 
+        // --- BUSCAR POR CATEGORIA OU PRIORIDADE ---
+        public async Task<List<Tarefa>> BuscarTarefas(string? categoria = null, int? prioridade = null, int pagina = 1, int tamanhoPagina = 20)
+        {
+            IQueryable<Tarefa> query = _contexto.Tarefas;
+
+            if (!string.IsNullOrEmpty(categoria))
+                query = query.Where(t => t.Categoria.ToLower() == categoria.ToLower());
+
+            if (prioridade.HasValue)
+                query = query.Where(t => t.Prioridade == prioridade.Value);
+
+            query = query.OrderByDescending(t => t.Prioridade)
+                         .ThenBy(t => t.DataCriacao)
+                         .Skip((pagina - 1) * tamanhoPagina)
+                         .Take(tamanhoPagina);
+
+            return await query.ToListAsync();
+        }
+
         // --- OBTER POR ID ---
         public async Task<Tarefa?> ObterTarefaPorId(Guid id)
         {

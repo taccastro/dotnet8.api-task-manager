@@ -9,5 +9,7 @@ namespace GerenciadorTarefas.API.Repositorios
         Task AdicionarTarefa(Tarefa tarefa);
         Task AtualizarTarefa(Tarefa tarefa);
         Task RemoverTarefa(Guid id);
+        Task<List<Tarefa>> BuscarTarefas(string? categoria = null, int? prioridade = null, int pagina = 1, int tamanhoPagina = 20);
+
     }
 }

@@ -15,7 +15,6 @@ namespace GerenciadorTarefas.API.Servicos
             _rabbitMQ = rabbitMQ;
         }
 
-        // Listar todas
         public async Task<List<TarefaDto>> ListarAsync()
         {
             var tarefas = await _repositorio.ListarTodasTarefas();
@@ -25,11 +24,11 @@ namespace GerenciadorTarefas.API.Servicos
                 Titulo = t.Titulo,
                 Descricao = t.Descricao,
                 Categoria = t.Categoria,
+                Prioridade = t.Prioridade,
                 DataCriacao = t.DataCriacao
             }).ToList();
         }
 
-        // Obter por Id
         public async Task<TarefaDto?> ObterPorIdAsync(Guid id)
         {
             var t = await _repositorio.ObterTarefaPorId(id);
@@ -41,29 +40,30 @@ namespace GerenciadorTarefas.API.Servicos
                 Titulo = t.Titulo,
                 Descricao = t.Descricao,
                 Categoria = t.Categoria,
+                Prioridade = t.Prioridade,
                 DataCriacao = t.DataCriacao
             };
         }
 
-        // Criar
         public async Task<TarefaDto> CriarAsync(TarefaCriarDto dto)
         {
             var tarefa = new Tarefa
             {
                 Titulo = dto.Titulo,
                 Descricao = dto.Descricao,
-                Categoria = dto.Categoria
+                Categoria = dto.Categoria,
+                Prioridade = dto.Prioridade
             };
 
             await _repositorio.AdicionarTarefa(tarefa);
 
-            // Publicar evento no RabbitMQ
             var evento = new
             {
                 Tipo = "TarefaCriada",
                 Id = tarefa.Id,
                 Titulo = tarefa.Titulo,
                 Categoria = tarefa.Categoria,
+                Prioridade = tarefa.Prioridade,
                 DataCriacao = tarefa.DataCriacao,
                 Timestamp = DateTime.UtcNow
             };
@@ -75,11 +75,11 @@ namespace GerenciadorTarefas.API.Servicos
                 Titulo = tarefa.Titulo,
                 Descricao = tarefa.Descricao,
                 Categoria = tarefa.Categoria,
+                Prioridade = tarefa.Prioridade,
                 DataCriacao = tarefa.DataCriacao
             };
         }
 
-        // Atualizar
         public async Task<TarefaDto?> AtualizarAsync(Guid id, TarefaAtualizarDto dto)
         {
             var tarefa = await _repositorio.ObterTarefaPorId(id);
@@ -88,16 +88,17 @@ namespace GerenciadorTarefas.API.Servicos
             tarefa.Titulo = dto.Titulo;
             tarefa.Descricao = dto.Descricao;
             tarefa.Categoria = dto.Categoria;
+            tarefa.Prioridade = dto.Prioridade;
 
             await _repositorio.AtualizarTarefa(tarefa);
 
-            // Publicar evento no RabbitMQ
             var evento = new
             {
                 Tipo = "TarefaAtualizada",
                 Id = tarefa.Id,
                 Titulo = tarefa.Titulo,
                 Categoria = tarefa.Categoria,
+                Prioridade = tarefa.Prioridade,
                 DataCriacao = tarefa.DataCriacao,
                 Timestamp = DateTime.UtcNow
             };
@@ -109,11 +110,11 @@ namespace GerenciadorTarefas.API.Servicos
                 Titulo = tarefa.Titulo,
                 Descricao = tarefa.Descricao,
                 Categoria = tarefa.Categoria,
+                Prioridade = tarefa.Prioridade,
                 DataCriacao = tarefa.DataCriacao
             };
         }
 
-        // Deletar
         public async Task<bool> DeletarAsync(Guid id)
         {
             var tarefa = await _repositorio.ObterTarefaPorId(id);
@@ -121,18 +122,34 @@ namespace GerenciadorTarefas.API.Servicos
 
             await _repositorio.RemoverTarefa(id);
 
-            // Publicar evento no RabbitMQ
             var evento = new
             {
                 Tipo = "TarefaRemovida",
                 Id = id,
                 Titulo = tarefa.Titulo,
                 Categoria = tarefa.Categoria,
+                Prioridade = tarefa.Prioridade,
                 Timestamp = DateTime.UtcNow
             };
             _rabbitMQ.Publish(System.Text.Json.JsonSerializer.Serialize(evento));
 
             return true;
+        }
+
+        // --- BUSCA POR FILTROS ---
+        public async Task<List<TarefaDto>> BuscarPorFiltrosAsync(string? categoria = null, int? prioridade = null, int pagina = 1, int tamanhoPagina = 20)
+        {
+            var tarefas = await _repositorio.BuscarTarefas(categoria, prioridade, pagina, tamanhoPagina);
+
+            return tarefas.Select(t => new TarefaDto
+            {
+                Id = t.Id,
+                Titulo = t.Titulo,
+                Descricao = t.Descricao,
+                Categoria = t.Categoria,
+                Prioridade = t.Prioridade,
+                DataCriacao = t.DataCriacao
+            }).ToList();
         }
     }
 }

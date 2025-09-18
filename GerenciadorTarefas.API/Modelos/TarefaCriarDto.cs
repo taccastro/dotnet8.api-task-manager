@@ -12,5 +12,8 @@ namespace GerenciadorTarefas.API.Modelos.Dados
 
         [Required]
         public string Categoria { get; set; } = string.Empty;
+
+        [Required]
+        public int Prioridade { get; set; } = 0;
     }
 }

@@ -36,6 +36,23 @@ namespace GerenciadorTarefas.API.Controllers
             return Ok(tarefas);
         }
 
+        [AllowAnonymous]
+        [HttpGet("filtro")]
+        public async Task<ActionResult<List<TarefaDto>>> Buscar([FromQuery] string? categoria, [FromQuery] int? prioridade,
+                                                         [FromQuery] int pagina = 1, [FromQuery] int tamanhoPagina = 20)
+        {
+            var tarefas = await _service.BuscarPorFiltrosAsync(categoria, prioridade, pagina, tamanhoPagina);
+
+            await _logService.RegistrarAsync(new LogEvento
+            {
+                Acao = "Buscar Tarefas",
+                Usuario = User?.Identity?.Name ?? "Anon",
+                Detalhes = $"Filtro - Categoria: {categoria}, Prioridade: {prioridade}, Resultados: {tarefas.Count}"
+            });
+
+            return Ok(tarefas);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<TarefaDto>> Obter(Guid id)
         {

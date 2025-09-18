@@ -24,6 +24,25 @@ namespace GerenciadorTarefas.API.Repositorios
             return Task.FromResult(tarefa);
         }
 
+        public Task<List<Tarefa>> BuscarTarefas(string? categoria = null, int? prioridade = null, int pagina = 1, int tamanhoPagina = 20)
+        {
+            IEnumerable<Tarefa> query = _tarefas;
+
+            if (!string.IsNullOrEmpty(categoria))
+                query = query.Where(t => t.Categoria.Equals(categoria, StringComparison.OrdinalIgnoreCase));
+
+            if (prioridade.HasValue)
+                query = query.Where(t => t.Prioridade == prioridade.Value);
+
+            query = query.OrderByDescending(t => t.Prioridade)
+                         .ThenBy(t => t.DataCriacao)
+                         .Skip((pagina - 1) * tamanhoPagina)
+                         .Take(tamanhoPagina);
+
+            return Task.FromResult(query.ToList());
+        }
+
+
         public Task AdicionarTarefa(Tarefa tarefa)
         {
             tarefa.Id = Guid.NewGuid();

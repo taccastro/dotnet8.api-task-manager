@@ -38,7 +38,6 @@ A ideia do projeto é criar uma API que seja fácil de entender e manter, usando
 
 * [ ] Prometheus & Grafana: monitorar a API e criar dashboards
 * [ ] Nginx: configurar reverse proxy para produção
-* [ ] Autenticação completa (JWT ou OAuth2)
 * [ ] Testes de integração ponta a ponta
 * [ ] Docker/Kubernetes: preparar para deploy real
 

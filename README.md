@@ -26,11 +26,11 @@ A ideia do projeto é criar uma API que seja fácil de entender e manter, usando
 * Testes unitários básicos para controllers e serviços
 * Middleware para tratamento de erros de forma centralizada
 * Swagger/OpenAPI configurado para documentação
-* Estrutura inicial de autenticação JWT e notificações (não finalizada)
+* Estrutura inicial de autenticação JWT
 * Cache Redis para deixar listagens mais rápidas
 * RabbitMQ publicando eventos quando tarefas são criadas, atualizadas ou removidas
 * Logs básicos armazenados no MongoDB
-* Arquitetura organizada em Controllers, Serviços e Repositórios (parecido com hexagonal)
+* Arquitetura organizada em Controllers, Serviços e Repositórios 
 
 ---
 

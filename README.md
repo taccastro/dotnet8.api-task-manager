@@ -55,7 +55,7 @@ A ideia do projeto é criar uma API que seja fácil de entender e manter, usando
 | RabbitMQ             | ✅ Feito    | Mensageria básica                    |
 | MongoDB              | ✅ Feito    | Logs / histórico                     |
 | Nginx                | ⏳ Pendente | Reverse proxy                        |
-| Prometheus & Grafana | ⏳ Pendente | Monitoramento                        |
+| Prometheus & Grafana |⚠️ Parcial| Monitoramento                        |
 
 ---
 

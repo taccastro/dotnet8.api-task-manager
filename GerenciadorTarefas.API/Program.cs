@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Prometheus;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -125,6 +127,9 @@ if (app.Environment.IsDevelopment())
 
 // Middleware de exceção **antes** dos endpoints
 app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseMetricServer(); // expõe /metrics
+app.UseHttpMetrics(); // coleta métricas HTTP (latência, status, etc.)
 
 app.UseHttpsRedirection();
 

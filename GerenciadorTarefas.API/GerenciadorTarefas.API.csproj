@@ -30,6 +30,7 @@
 
 		<!-- Provider PostgreSQL -->
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
+		<PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
 		<PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
 
 		<!-- Swagger / OpenAPI -->

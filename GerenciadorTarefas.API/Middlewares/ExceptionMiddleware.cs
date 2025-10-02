@@ -1,4 +1,6 @@
-﻿namespace GerenciadorTarefas.API.Middlewares
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace GerenciadorTarefas.API.Middlewares
 {
     public class ExceptionMiddleware
     {

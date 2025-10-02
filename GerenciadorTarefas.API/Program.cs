@@ -33,7 +33,15 @@ builder.Services.AddStackExchangeRedisCache(options =>
 // ----------------------
 builder.Services.AddScoped<ITarefaRepositorio, TarefaRepositorioPostgres>();
 builder.Services.AddScoped<TarefaServico>();
-builder.Services.AddSingleton<IRabbitMQPublisher, RabbitMQPublisher>();
+
+// Configuração RabbitMQ
+var rabbitMQHost = builder.Configuration["RabbitMQ:Host"] ?? "localhost";
+var rabbitMQPort = int.Parse(builder.Configuration["RabbitMQ:Porta"] ?? "5672");
+var rabbitMQUsuario = builder.Configuration["RabbitMQ:Usuario"] ?? "guest";
+var rabbitMQSenha = builder.Configuration["RabbitMQ:Senha"] ?? "guest";
+
+builder.Services.AddSingleton<IRabbitMQPublisher>(provider => 
+    new RabbitMQPublisher(rabbitMQHost, rabbitMQPort, rabbitMQUsuario, rabbitMQSenha));
 //builder.Services.AddSingleton<AutenticacaoServico>(); PRA USAR REPO EM MEMO
 builder.Services.AddScoped<AutenticacaoServico>();
 builder.Services.AddSingleton<LogService>();
@@ -137,6 +145,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Health check endpoint
+app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 
 //var consumer = new RabbitMQConsumer();
 //consumer.Consumir();

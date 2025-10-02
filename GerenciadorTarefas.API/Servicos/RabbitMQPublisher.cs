@@ -8,9 +8,15 @@ namespace GerenciadorTarefas.API.Servicos
         private readonly IConnection _connection;
         private readonly RabbitMQ.Client.IModel _channel;
 
-        public RabbitMQPublisher(string hostName = "localhost")
+        public RabbitMQPublisher(string hostName = "localhost", int porta = 5672, string usuario = "guest", string senha = "guest")
         {
-            var factory = new ConnectionFactory() { HostName = hostName };
+            var factory = new ConnectionFactory() 
+            { 
+                HostName = hostName,
+                Port = porta,
+                UserName = usuario,
+                Password = senha
+            };
 
             // Conexão e canal síncronos (funciona no .NET 8)
             _connection = factory.CreateConnection();

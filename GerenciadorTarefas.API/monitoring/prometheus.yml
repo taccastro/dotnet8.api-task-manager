@@ -5,4 +5,4 @@ scrape_configs:
   - job_name: 'gerenciador_tarefas_api'
     metrics_path: '/metrics'
     static_configs:
-      - targets: ['host.docker.internal:5000']  # use 172.17.0.1 se estiver no Linux
+      - targets: ['host.docker.internal:5075']
